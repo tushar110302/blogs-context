@@ -1,4 +1,5 @@
 import { createContext,useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export const BlogContext = createContext()
 
@@ -8,15 +9,24 @@ export function BlogProvider({children}){
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
 
-    async function fetchPosts(page=1) {
+
+    async function fetchPosts(page=1,tag='', category='') {
         const baseUrl = `https://codehelp-apis.vercel.app/api/get-blogs?page=${page}`;
+        let url = baseUrl
+        if(tag){
+            url+=`&tag=${tag}`
+        }
+        if(category){
+             url+=`&category=${category}`
+        }
+        console.log(url)
         setLoading(true);
         try {
-            console.log("HERE")
-            const response = await fetch(baseUrl);
+            // console.log("HERE")
+            const response = await fetch(url);
             const data = await response.json();
             setPosts(data.posts)
-            console.log(data.posts)
+            // console.log(data.posts)
             setPage(data.page);
             setTotalPage(data.totalPages);
         } catch (error) {
@@ -25,7 +35,7 @@ export function BlogProvider({children}){
         setLoading(false)
     }
     
-    useEffect(()=> {
+    useEffect(()=> { 
         fetchPosts();
       }, [])
 

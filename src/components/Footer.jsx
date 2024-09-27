@@ -1,12 +1,23 @@
 import React, { useContext } from 'react'
 import { BlogContext } from '../context/BlogContext'
+import { useLocation } from 'react-router-dom';
 
 function Footer() {
     const {page, setPage, fetchPosts, totalPage} = useContext(BlogContext)
-
+    const location = useLocation()
     function clickHandler(page){
         setPage(page);
-        fetchPosts(page)
+        if(location.pathname.includes('tags')){
+            const tag = location.pathname.split("/").at(-1).replaceAll("-"," ");
+            fetchPosts(page,tag)
+        }
+        else if(location.pathname.includes('categories')){
+            const category = location.pathname.split('/').at(-1).replaceAll("-"," ");
+            fetchPosts(page,'',category)
+        }
+        else{
+            fetchPosts(page)
+        }
     }
   return (
     <div className=' w-full flex justify-center bg-white fixed bottom-0 text-center py-1 mt-4 border-t-2 '>
