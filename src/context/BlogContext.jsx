@@ -4,7 +4,7 @@ export const BlogContext = createContext()
 
 export function BlogProvider({children}){
     const [page, setPage] = useState(1)
-    const [totalPage, setTotalPage] = useState(null)
+    const [totalPage, setTotalPage] = useState(1)
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -24,9 +24,11 @@ export function BlogProvider({children}){
         }
         setLoading(false)
     }
+    
     useEffect(()=> {
         fetchPosts();
       }, [])
+
     const value = {
         page,
         setPage, 
